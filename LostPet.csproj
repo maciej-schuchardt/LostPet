@@ -4,13 +4,12 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-LostPet-0404628f-f011-42ff-a5b6-bca73d8dfb16</UserSecretsId>
+    <UserSecretsId>aspnet-LostPet-a5c67ff4-a3e4-4aad-b22d-cec1b92aa666</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10" />
   </ItemGroup>
