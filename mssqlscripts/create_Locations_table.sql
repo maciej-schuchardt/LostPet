@@ -1,0 +1,8 @@
+CREATE TABLE Locations (
+    LocationID INT IDENTITY(1,1) PRIMARY KEY,
+    Address NVARCHAR(255) NOT NULL,
+    City NVARCHAR(100) NOT NULL,
+    State NVARCHAR(50) NOT NULL,
+    ZipCode NVARCHAR(20) NOT NULL,
+    Coordinates GEOGRAPHY NULL
+);

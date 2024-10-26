@@ -1,6 +1,7 @@
 using LostPet.Components;
 using LostPet.Components.Account;
 using LostPet.Data;
+using LostPet.Services.Pet;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace LostPet
             builder.Services.AddScoped<IdentityUserAccessor>();
             builder.Services.AddScoped<IdentityRedirectManager>();
             builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+            builder.Services.AddScoped<IPetService, PetService>();
 
             builder.Services.AddAuthentication(options =>
                 {
