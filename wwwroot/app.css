@@ -1,4 +1,53 @@
+:root {
+    --bg-color: #001e2b;
+    --dark-green: #023430;
+    --mid-green: #00684a;
+    --neon_green: #00ed64;
+    /*--border-green: #00684a;*/
+    --pure-white: #fff;
+    /*font-family: "Source Serif 4", serif !important;*/
+}
+
+.pt-serif-regular {
+    font-family: "PT Serif", serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+}
+
+.pt-serif-bold {
+    font-family: "PT Serif", serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.pt-serif-regular-italic {
+    font-family: "PT Serif", serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.pt-serif-bold-italic {
+    font-family: "PT Serif", serif;
+    font-weight: 700;
+    font-style: italic;
+}
+
 html, body {
+    background-color: var(--bg-color);
+}
+nav {
+    background-color: var(--pure-white);
+}
+
+.test {
+    background-color: salmon;
+}
+@media (min-width: 576px) {
+    .test {
+        background-color: aqua;
+    }
+}
+/*html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
@@ -49,3 +98,4 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+*/
