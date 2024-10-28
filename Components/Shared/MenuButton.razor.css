@@ -1,0 +1,13 @@
+﻿button {
+    color: rgb(0, 104, 74) !important;
+}
+
+    button:hover {
+        color: #00ED64 !important;
+    }
+
+@media (max-width: 575.98px) {
+    .center {
+        justify-content: center !important;
+    }
+}
