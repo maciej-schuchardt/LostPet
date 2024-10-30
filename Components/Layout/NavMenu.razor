@@ -3,18 +3,24 @@
 <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3 pt-serif-regular">
     <div class="container-fluid">
         <a class="navbar-brand fs-3" href="#">LostPet &#128021; </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarTogglerDemo02">
-            <ul class="navbar-nav mb-2 mb-lg-0">
-                <li class="nav-item p-1">
-                    <MenuButton Text="Zaloguj się"/>
-                </li>
-                <li class="nav-item p-1">
-                    <MenuButton Text="Utwórz nowe konto"/>
-                </li>
-            </ul>
-        </div>
+        <AuthorizeView>
+            <NotAuthorized>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarTogglerDemo02">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item p-1">
+                            <MenuButton Text="Zaloguj się" ModalID="login-modal" />
+                        </li>
+                        <li class="nav-item p-1">
+                            <MenuButton Text="Utwórz nowe konto" ModalID="register-modal" />
+                        </li>
+                    </ul>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
     </div>
 </nav>
+<LoginModal Id="login-modal" Title="Zaloguj się"/>
+<RegisterModal Id="register-modal" Title="Zarejestruj się"/>
