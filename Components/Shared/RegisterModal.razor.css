@@ -1,0 +1,3 @@
+﻿.label-custom::after {
+    background-color: inherit !important;
+}
