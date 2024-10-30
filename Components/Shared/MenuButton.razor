@@ -1,19 +1,22 @@
-﻿<button type="button" class="btn nav-link center" @attributes="attributes">
+﻿<button type="button" class="btn nav-link center" data-bs-toggle=@_toggle data-bs-target=@_target>
     @Text
 </button>
 
 @code {
-    [Parameter]
+    [Parameter, EditorRequired]
     public required string Text { get; set; }
 
     [Parameter]
     public string? ModalID { get; set; }
 
+    private string? _toggle;
+    private string? _target;
+
     private Dictionary<string, object> attributes = new Dictionary<string, object>();
 
-    public MenuButton()
+    protected override void OnInitialized()
     {
-        if (ModalID != null) attributes["data-bs-target"] = ModalID;
-        if (ModalID != null) attributes["data-bs-toggle"] = "modal";
+        _toggle = ModalID != null ? "modal" : _toggle;
+        _target = ModalID != null ? $"#{ModalID}" : _target;
     }
 }
