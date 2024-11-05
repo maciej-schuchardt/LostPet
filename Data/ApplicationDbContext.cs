@@ -6,7 +6,7 @@ namespace LostPet.Data
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
     {
-        //public DbSet<User> Users { get; set; }
         public DbSet<Pet> Pets { get; set; }
+        public DbSet<Report> Reports { get; set; }
     }
 }
