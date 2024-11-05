@@ -1,8 +1,8 @@
-﻿@page "/Account/Register"
-
-@using System.ComponentModel.DataAnnotations
+﻿@using System.ComponentModel.DataAnnotations
 @using System.Text
 @using System.Text.Encodings.Web
+@using LostPet.Components.Account
+@using LostPet.Components.Account.Pages
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 @using LostPet.Data
@@ -15,46 +15,43 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Register</PageTitle>
-
-<h1>Register</h1>
-
-<div class="row">
-    <div class="col-md-4">
-        <StatusMessage Message="@Message" />
+<div class="row justify-content-center" style="text-align: center";>
+    <h3 class="text-light pb-3">Zaloguj się</h3>
+    <div class="col-sm-12 col-md-7">
+        <section>
         <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
-            <DataAnnotationsValidator />
-            <h2>Create a new account.</h2>
-            <hr />
-            <ValidationSummary class="text-danger" role="alert" />
             <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label for="email">Email</label>
+            <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+            <label for="email" class="form-label label-custom"  style="color: rgb(232, 237, 235)">Email</label>
                 <ValidationMessage For="() => Input.Email" class="text-danger" />
             </div>
             <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label for="password">Password</label>
+            <InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+            <label for="password" class="form-label label-custom" style="color: rgb(232, 237, 235)">Hasło</label>
                 <ValidationMessage For="() => Input.Password" class="text-danger" />
             </div>
             <div class="form-floating mb-3">
-                <InputText type="password" @bind-Value="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label for="confirm-password">Confirm Password</label>
+            <InputText type="password" @bind-Value="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+            <label for="confirm-password" class="form-label label-custom" style="color: rgb(232, 237, 235)">Potwierdź hasło</label>
                 <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <div class="modal-footer" style="border-top: none">
+                <button type="submit" class="w-100 btn btn-lg btn-primary" style="background-color: rgb(0, 104, 74); border: 1px solid rgb(0, 237, 100);">
+                    Zarejestruj się
+                </button>
+            </div>
         </EditForm>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            <ExternalLoginPicker />
         </section>
     </div>
 </div>
 
 @code {
+    [Parameter]
+    public required string Id { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
     private IEnumerable<IdentityError>? identityErrors;
 
     [SupplyParameterFromForm]
