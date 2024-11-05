@@ -1,7 +1,7 @@
 using LostPet.Components;
 using LostPet.Components.Account;
 using LostPet.Data;
-using LostPet.Services.Pet;
+using LostPet.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +22,9 @@ namespace LostPet
             builder.Services.AddScoped<IdentityUserAccessor>();
             builder.Services.AddScoped<IdentityRedirectManager>();
             builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
-            builder.Services.AddScoped<IPetService, PetService>();
+            builder.Services.AddScoped<PetService>();
+            builder.Services.AddScoped<ReportService>();
+            builder.Services.AddScoped<UserIdentityProcessor>();
 
             builder.Services.AddAuthentication(options =>
                 {
@@ -64,7 +66,7 @@ namespace LostPet
             // Add additional endpoints required by the Identity /Account Razor components.
             app.MapAdditionalIdentityEndpoints();
 
-            app.Run();
+           app.Run();
         }
     }
 }
