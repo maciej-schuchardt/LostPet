@@ -1,26 +1,41 @@
-﻿@using LostPet.Components.Shared
+﻿@using LostPet.Components.Account
+@using LostPet.Components.Shared
+@using LostPet.Data
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IdentityRedirectManager RedirectManager
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3 pt-serif-regular">
     <div class="container-fluid">
         <a class="navbar-brand fs-3" href="#">LostPet &#128021; </a>
-        <AuthorizeView>
-            <NotAuthorized>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse justify-content-end" id="navbarTogglerDemo02">
-                    <ul class="navbar-nav mb-2 mb-lg-0">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                <li class="nav-item p-1">
+                    <MenuButton Text="Zgłoś!" Page="report" />
+                </li>
+                <AuthorizeView>
+                    <Authorized>
                         <li class="nav-item p-1">
-                            <MenuButton Text="Zaloguj się" ModalID="login-modal" />
+                            <MenuButton Text="Wyloguj" Page="Account/Logout" />
+                        </li>
+                    </Authorized>
+                    <NotAuthorized>
+                        <li class="nav-item p-1">
+                            <MenuButton Text="Zaloguj się" Page="Account/Login" />
                         </li>
                         <li class="nav-item p-1">
-                            <MenuButton Text="Utwórz nowe konto" ModalID="register-modal" />
+                            <MenuButton Text="Utwórz nowe konto" Page="Account/Register" />
                         </li>
-                    </ul>
-                </div>
-            </NotAuthorized>
-        </AuthorizeView>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </ul>
+        </div>
     </div>
 </nav>
-<LoginModal Id="login-modal" Title="Zaloguj się"/>
-<RegisterModal Id="register-modal" Title="Zarejestruj się"/>
