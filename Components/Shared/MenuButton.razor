@@ -1,4 +1,7 @@
-﻿<button type="button" class="btn nav-link center" data-bs-toggle=@_toggle data-bs-target=@_target>
+﻿@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<button type="button" @onclick="GoTo" class="btn nav-link center">
     @Text
 </button>
 
@@ -7,16 +10,10 @@
     public required string Text { get; set; }
 
     [Parameter]
-    public string? ModalID { get; set; }
+    public string? Page { get; set; }
 
-    private string? _toggle;
-    private string? _target;
-
-    private Dictionary<string, object> attributes = new Dictionary<string, object>();
-
-    protected override void OnInitialized()
+    private void GoTo()
     {
-        _toggle = ModalID != null ? "modal" : _toggle;
-        _target = ModalID != null ? $"#{ModalID}" : _target;
+        if (Page != null) NavigationManager.NavigateTo(Page, forceLoad: true);
     }
 }
