@@ -1,0 +1,192 @@
+﻿@page "/report"
+
+@using LostPet.Components.Account
+@using LostPet.Models
+@using System.ComponentModel.DataAnnotations
+@using LostPet.Services
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Identity
+@using LostPet.Data
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore.ChangeTracking
+
+@attribute [Authorize]
+
+@inject ILogger<ReportPet> Logger
+@inject SignInManager<ApplicationUser> SignInManager
+@inject NavigationManager NavigationManager
+@inject IdentityRedirectManager RedirectManager
+@inject PetService petService
+@inject ReportService reportService
+@inject UserIdentityProcessor _userIdentityProcessor
+
+@rendermode InteractiveServer
+
+<EditForm Model="@Input" method="post" OnValidSubmit="@AddReport" FormName="reportForm">
+    <div class="row">
+         <div class="form-floating mb-3 col-sm-12 col-md-4">
+            <InputText @bind-Value="Input.Name" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+            <label for="name" class="form-label label-custom" style="color: rgb(232, 237, 235)">Imię</label>
+            <ValidationMessage For="() => Input.Name" class="text-danger" />
+        </div>
+        <div class="form-floating mb-3 col-sm-12 col-md-4">
+            <InputText @bind-Value="Input.Species" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+            <label for="Species" class="form-label label-custom" style="color: rgb(232, 237, 235)">Gatunek</label>
+            <ValidationMessage For="() => Input.Species" class="text-danger" />
+        </div>
+        <div class="form-floating mb-3 col-sm-12 col-md-4">
+            <InputText @bind-Value="Input.Breed" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+            <label for="Breed" class="form-label label-custom" style="color: rgb(232, 237, 235)">Rasa</label>
+            <ValidationMessage For="() => Input.Breed" class="text-danger" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-floating mb-3 col-sm-12 col-md-4">
+            <InputText @bind-Value="Input.Color" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+            <label for="Color" class="form-label label-custom" style="color: rgb(232, 237, 235)">Kolor</label>
+            <ValidationMessage For="() => Input.Color" class="text-danger" />
+        </div>
+        <div class="form-floating mb-3 col-sm-12 col-md-4">
+            <InputText @bind-Value="Input.Age" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+            <label for="Age" class="form-label label-custom" style="color: rgb(232, 237, 235)">Wiek</label>
+            <ValidationMessage For="() => Input.Age" class="text-danger" />
+        </div>
+        <div class="form-floating mb-3 col-sm-12 col-md-4">
+            <InputText @bind-Value="Input.Weight" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+            <label for="Weight" class="form-label label-custom" style="color: rgb(232, 237, 235)">Waga</label>
+            <ValidationMessage For="() => Input.Weight" class="text-danger" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-floating mb-3 col-sm-12 col-md-4">
+            <InputText @bind-Value="Input.MicrochipID" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+            <label for="MicrochipID" class="form-label label-custom" style="color: rgb(232, 237, 235)">Nr. Mikrochipa</label>
+            <ValidationMessage For="() => Input.MicrochipID" class="text-danger" />
+        </div>
+        <div class="form-floating mb-3 col-sm-12 col-md-4">
+            <InputSelect @bind-Value="Input.Status" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;">
+                <option checked="@(Input!.Status == Status.Lost)"
+                        value=@Status.Lost>
+                    Zagubiony
+                </option>
+                <option checked="@(Input!.Status == Status.Found)"
+                        value=@Status.Found>
+                    Znaleziony
+                </option>
+            </InputSelect>
+            <label for="Status" class="form-label label-custom" style="color: rgb(232, 237, 235)">Status</label>
+            <ValidationMessage For="() => Input.Status" class="text-danger" />
+        </div>
+        <div class="mb-3 col-sm-12 col-md-4">
+            <InputFile id="Attachments" name="Input.Attachment" OnChange="@SetFile" style="display: none;" />
+            <label for="Attachments" class="form-control text-black" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;min-height: 100%;cursor:pointer;place-content:center;" >@(ImageName ?? "Dodaj zdjęcie")</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-floating mb-3 col-sm-12 col-md-6">
+            <InputText @bind-Value="Input.LastSeenLocation" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+            <label for="LastSeenLocation" class="form-label label-custom" style="color: rgb(232, 237, 235)">Ostatnio widziany</label>
+            <ValidationMessage For="() => Input.LastSeenLocation" class="text-danger" />
+        </div>
+        <div class="form-floating mb-3 col-sm-12 col-md-6">
+            <InputText @bind-Value="Input.Description" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+            <label for="Description" class="form-label label-custom" style="color: rgb(232, 237, 235)">Opis</label>
+            <ValidationMessage For="() => Input.Description" class="text-danger" />
+        </div>
+    </div>
+    <button type="submit" class="w-100 btn btn-lg btn-primary" style="background-color: rgb(0, 104, 74); border: 1px solid rgb(0, 237, 100);">
+        Zgłoś
+    </button>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm(FormName = "reportForm")]
+    private InputModel Input { get; set; } = new();
+    private string? ImageName { get; set; }
+
+    private sealed class InputModel
+    {
+        public string Name { get; set; }
+        public string Species { get; set; } = "";
+        public string? Breed { get; set; } = "";
+        public string? Color { get; set; } = "";
+        public string? Age { get; set; } = "";
+        public string? Weight { get; set; } = "";
+        public string? MicrochipID { get; set; } = "";
+        public Status Status { get; set; } = Status.Lost;
+        public string? LastSeenLocation { get; set; } = "";
+        public string? Description { get; set; } = "";
+        public IBrowserFile Attachment { get; set; }
+    }
+
+    private void SetFile(InputFileChangeEventArgs e)
+    {
+        Input.Attachment = e.File;
+        ImageName = Input.Attachment.Name;
+    }
+
+    public async Task AddReport()
+    {
+        var userId = await this._userIdentityProcessor.GetCurrentUserId();
+        Pet entity = null;
+        Report entity2 = null;
+        try
+        {
+            var photo = await ImgToBytes(this.Input.Attachment);
+            Pet pet = new()
+                {
+                    Name = Input.Name,
+                    Species = Input.Species,
+                    Breed = Input.Breed,
+                    Color = Input.Color,
+                    Age = Convert.ToInt32(Input.Age),
+                    Weight = Convert.ToDouble(Input.Weight),
+                    MicrochipID = Input.MicrochipID,
+                    Photo = photo,
+                    Status = Input.Status,
+                    UserID = userId,
+                    Description = Input.Description,
+                    LastSeenLocation = Input.LastSeenLocation,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                };
+            entity = await petService.AddNewPet(pet);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Error while adding new pet");
+            throw;
+        }
+
+        try {
+            Report report = new()
+            {
+                    PetID = entity.PetID,
+                    UserID = entity.UserID,
+                    ReportType = (int)entity.Status,
+                    Details = entity.Description,
+                    ReportDate = DateTime.Now
+            };
+
+            entity2 = await reportService.AddNewReport(report);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Error while adding new report");
+            throw;
+        }
+
+        RedirectManager.RedirectTo("/");
+    }
+
+    public async Task<string> ImgToBytes(IBrowserFile file)
+    {
+        var str = new MemoryStream();
+        await file.OpenReadStream(file.Size).CopyToAsync(str);
+        var bytes = str.ToArray();
+        var blob = "data:image;base64, ";
+        blob += Convert.ToBase64String(bytes);
+
+        return blob;
+    }
+}
