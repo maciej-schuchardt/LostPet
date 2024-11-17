@@ -25,6 +25,7 @@ namespace LostPet
             builder.Services.AddScoped<PetService>();
             builder.Services.AddScoped<ReportService>();
             builder.Services.AddScoped<UserIdentityProcessor>();
+            builder.Services.AddScoped<FilterService>();
 
             builder.Services.AddAuthentication(options =>
                 {
