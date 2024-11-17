@@ -1,0 +1,34 @@
+﻿.card {
+    background-color: #00684A;
+    color: rgb(232, 237, 235);
+}
+
+li {
+    background-color: inherit;
+    border: none;
+    color: rgb(232, 237, 235);
+}
+
+.main-button {
+    border: 1px solid rgb(0, 237, 100);
+    color: rgb(0, 237, 100);
+    transition: 150ms ease-in-out;
+    background-color: transparent;
+}
+
+    .main-button:hover {
+        color: rgb(0, 237, 100);
+        background-color: rgba(0, 237, 100, 0.04);
+        border-color: rgb(0, 237, 100);
+    }
+
+    .main-button:active {
+        color: rgb(0, 237, 100) !important;
+        background-color: rgba(0, 237, 100, 0.04) !important;
+        border-color: rgb(0, 237, 100) !important;
+        box-shadow: rgb(2, 52, 48) 0px 0px 0px 3px !important;
+    }
+
+.btn-group {
+    width: 100%
+}
