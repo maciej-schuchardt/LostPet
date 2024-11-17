@@ -7,6 +7,8 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IdentityRedirectManager RedirectManager
 @inject NavigationManager NavigationManager
+@inject UserManager<ApplicationUser> _userManager
+
 @rendermode InteractiveServer
 
 <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3 pt-serif-regular">
@@ -23,7 +25,16 @@
                 <AuthorizeView>
                     <Authorized>
                         <li class="nav-item p-1">
-                            <MenuButton Text="Wyloguj" Page="Account/Logout" />
+                            <MenuButton Text="Moje zgłoszenia" Page="myreports" />
+                        </li>
+
+                        <li class="nav-item p-1">
+                            @{
+                                string user = context.User.Identity.Name;
+                                string message = $"Wyloguj {user}";
+                            }
+
+                            <MenuButton Text="@message" Page="Account/Logout" />
                         </li>
                     </Authorized>
                     <NotAuthorized>
