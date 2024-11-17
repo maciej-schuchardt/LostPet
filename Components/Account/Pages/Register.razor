@@ -1,4 +1,6 @@
-﻿@using System.ComponentModel.DataAnnotations
+﻿@page "/Account/Register"
+
+@using System.ComponentModel.DataAnnotations
 @using System.Text
 @using System.Text.Encodings.Web
 @using LostPet.Components.Account
@@ -16,7 +18,7 @@
 @inject IdentityRedirectManager RedirectManager
 
 <div class="row justify-content-center" style="text-align: center";>
-    <h3 class="text-light pb-3">Zaloguj się</h3>
+    <h3 class="text-light pb-3">Zarejestruj się</h3>
     <div class="col-sm-12 col-md-7">
         <section>
         <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
@@ -44,7 +46,11 @@
         </section>
     </div>
 </div>
-
+<style>
+    .label-custom::after {
+        background-color: inherit !important;
+    }
+</style>
 @code {
     [Parameter]
     public required string Id { get; set; }
