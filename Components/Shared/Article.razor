@@ -1,0 +1,81 @@
+﻿@using LostPet.Models
+@using LostPet.Services
+
+@inject PetService petService
+@inject ReportService reportService
+@inject NavigationManager navigationManager
+
+@rendermode InteractiveServer
+
+<div class="card my-5">
+    <div class="card-header">
+        <h5 class="card-title">[@(Model.Pet.Status == Status.Lost ? "ZAGINIONY" : Model.Pet.Status == Status.Stray ? "ZBŁĄKANY" : "ODNALEZIONY")] @Model.Pet.Name</h5>
+    </div>
+    <img src="@Model.Pet.Photo" class="card-img-top" alt="...">
+    <div class="card-body">
+        <p class="card-text">Opis: @Model.Pet.Description</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">Utworzono: @Model.Pet.CreatedAt</li>
+        <li class="list-group-item">Ostatnio widziny w: @Model.Pet.LastSeenLocation</li>
+        <li class="list-group-item">Dodane przez: @Model.ReporterEmail</li>
+    </ul>
+    <div class="card-footer text-body-secondary overflow-auto @(Model.Sightings.Count > 0 ? "" : "py-0")" style="max-height: 220px; background-color: #023430;">
+        @foreach (SightingsViewModel sighting in Model.Sightings)
+        {
+            <div class="card border-success mb-3" style="background-color: inherit;">
+                <div class="card-header">Dodane przez: @sighting.ReporterEmail </div>
+                <div class="card-body">
+                    <h5 class="card-title">Widziany w: @sighting.Sighting.Location</h5>
+                    <p class="card-text">@sighting.Sighting.Notes</p>
+                </div>
+                <div class="card-footer">Dodane: @sighting.Sighting.SightingDate</div>
+            </div>
+        }
+    </div>
+    <div class="card-footer text-body-secondary">
+        <div class="btn-group" role="group" aria-label="Basic outlined example" style="width: 100%">
+            <button type="button" class="btn btn-outline-primary main-button" disabled="@(Model.Pet.Status == Status.Found)" @onclick="@(e => AddComment(Model.Pet.PetID))">Dodaj komentarz</button>
+            @if (CurrentUser == Model.Report.UserID)
+            {
+                @if (Model.Pet.Status != Status.Found)
+                {
+                    <button type="button" class="btn btn-outline-primary main-button" @onclick="@(() => Found(Model.Pet.PetID))">Odnaleziony</button>
+                }
+                <button type="button" class="btn btn-danger" @onclick="@(() => Remove(Model.Pet.PetID))">Usuń</button>
+            }
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter, EditorRequired]
+    public required ReportSightingPetViewModel Model { get; set; }
+
+    [Parameter, EditorRequired]
+    public required string CurrentUser { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("XD");
+    }
+    private void AddComment(int pet)
+    {
+        if(Model.Pet.Status != Status.Found)
+        {
+            navigationManager.NavigateTo($"Sighting/{pet}");
+        }
+    }
+
+    private async void Remove(int id)
+    {
+        await petService.Remove(id);
+        await InvokeAsync(() => this.StateHasChanged());
+    }
+
+    private async void Found(int id)
+    {
+        await petService.Found(id);
+        await reportService.Found(id);
+        await InvokeAsync(() => this.StateHasChanged());
+    }
+}
