@@ -8,5 +8,6 @@ namespace LostPet.Data
     {
         public DbSet<Pet> Pets { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<Sighting> Sightings { get; set; }
     }
 }
