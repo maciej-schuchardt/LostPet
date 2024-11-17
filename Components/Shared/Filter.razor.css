@@ -1,0 +1,17 @@
+﻿.label-custom::after {
+    background-color: inherit !important;
+}
+
+@media (max-width: 767.98px) {
+    .w-auto {
+        width:100% !important;
+    }
+
+    .custom-margin {
+        margin-bottom: 1rem !important;
+    }
+
+    .custom-top-margin{
+        margin-top: 1rem !important;
+    }
+}

@@ -1,0 +1,103 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using LostPet.Components.Pages
+@using LostPet.Models
+@using LostPet.Services
+
+@inject FilterService filter
+
+<nav class="navbar navbar-expand-md navbar-dark box-shadow mb-3 pt-serif-regular" style="background-color: #112733;">
+    <div class="container-fluid">
+        <p></p>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#filters" aria-controls="filters" aria-expanded="false" aria-label="Toggle navigation">
+            Filtry
+        </button>
+        <div class="collapse navbar-collapse justify-content-around custom-top-margin" id="filters">
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                <EditForm Model="@Input" method="post" OnValidSubmit="@FilterPosts" FormName="reportForm">
+                    <div class="row">
+                        <div class="form-floating w-auto col-sm-12 custom-margin">
+                            <InputText @bind-Value="Input.Name" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+                            <label for="name" class="form-label label-custom" style="color: rgb(232, 237, 235)">Imię</label>
+                        </div>
+                        <div class="form-floating w-auto col-sm-12 custom-margin">
+                            <InputText @bind-Value="Input.Species" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+                            <label for="Species" class="form-label label-custom" style="color: rgb(232, 237, 235)">Gatunek</label>
+                        </div>
+                        <div class="form-floating w-auto col-sm-12 custom-margin">
+                            <InputText @bind-Value="Input.Breed" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+                            <label for="Breed" class="form-label label-custom" style="color: rgb(232, 237, 235)">Rasa</label>
+                        </div>
+                        <div class="form-floating w-auto col-sm-12 custom-margin">
+                            <InputText @bind-Value="Input.Color" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+                            <label for="Color" class="form-label label-custom" style="color: rgb(232, 237, 235)">Kolor</label>
+                        </div>
+                        <div class="form-floating w-auto col-sm-12 custom-margin">
+                            <InputSelect @bind-Value="Input.Status" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;">
+                                <option checked="@(Input!.Status == Status.Lost)"
+                                        value=@Status.Lost>
+                                    Zagubiony
+                                </option>
+                                <option checked="@(Input!.Status == Status.Found)"
+                                        value=@Status.Found>
+                                    Znaleziony
+                                </option>
+                            </InputSelect>
+                            <label for="Status" class="form-label label-custom" style="color: rgb(232, 237, 235)">Status</label>
+                        </div>
+                        <div class="form-floating w-auto col-sm-12 custom-margin">
+                            <InputText @bind-Value="Input.LastSeenLocation" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+                            <label for="LastSeenLocation" class="form-label label-custom" style="color: rgb(232, 237, 235)">Ostatnio widziany</label>
+                        </div>
+                        <div class="form-floating w-auto col-sm-12 custom-margin">
+                            <InputText @bind-Value="Input.Description" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+                            <label for="Description" class="form-label label-custom" style="color: rgb(232, 237, 235)">Opis</label>
+                        </div>
+                        <button type="submit" class="w-auto btn btn-lg btn-primary col-sm-12" style="background-color: rgb(0, 104, 74); border: 1px solid rgb(0, 237, 100);">
+                            Filtruj
+                        </button>
+                    </div>
+                </EditForm>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+@code {
+    [SupplyParameterFromForm(FormName = "reportForm")]
+    private InputModel Input { get; set; } = new();
+
+    private sealed class InputModel
+    {
+        public string Name { get; set; } = "";
+
+        public string Species { get; set; } = "";
+
+        public string Breed { get; set; } = "";
+
+        public string Color { get; set; } = "";
+
+        public Status? Status { get; set; } = null;
+
+        public string LastSeenLocation { get; set; } = "";
+
+        public string Description { get; set; } = "";
+    }
+
+    public async Task FilterPosts()
+    {
+        await filter.Filter(x =>
+            {
+                var result = x.Name.Contains(Input.Name);
+                var r2 = x.Species.Contains(Input.Species);
+                var r3 = x.Breed.Contains(Input.Breed);
+                var r4 = x.Color.Contains(Input.Color);
+                var r5 = x.Status != null && Input.Status != null ? x.Status.Equals(Input.Status) : true;
+                var r6 = x.LastSeenLocation.Contains(Input.LastSeenLocation);
+                var r7 = x.Description.Contains(Input.Description);
+
+                return result && r2 && r3 && r4 && r5 && r6 && r7;
+            }
+        );
+        await InvokeAsync(() => this.StateHasChanged());
+    }
+}
