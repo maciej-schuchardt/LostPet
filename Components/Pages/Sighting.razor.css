@@ -1,0 +1,14 @@
+﻿.label-custom::after {
+    background-color: inherit !important;
+}
+
+.card {
+    background-color: #00684A;
+    color: rgb(232, 237, 235);
+}
+
+li {
+    background-color: inherit;
+    border: none;
+    color: rgb(232, 237, 235);
+}

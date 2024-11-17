@@ -1,0 +1,108 @@
+﻿@page "/sighting/{petID}"
+
+@using LostPet.Components.Account
+@using LostPet.Models
+@using LostPet.Services
+@using Microsoft.AspNetCore.Authorization
+
+@inject SightingsService service
+@inject PetService petService
+@inject UserIdentityProcessor _userIdentityProcessor
+@inject NavigationManager NavigationManager
+@inject IdentityRedirectManager RedirectManager
+
+@rendermode InteractiveServer
+
+@attribute [Authorize]
+
+<div class="container-fluid col-sm-10 col-md-8 col-lg-3">
+<PageTitle>Zgłoś!</PageTitle>
+@if (pet == null)
+{
+    <span>Loading...</span>
+}
+else
+{
+<div class="row justify-content-center" style="text-align: center">
+    <h3 class="text-light pb-3">Podaj szczegóły dotyczące napotkanego zwierzaka</h3>
+    <div class="col-sm-12 col-md-7">
+        <div class="card my-5">
+            <div class="card-header">
+                <h5 class="card-title">[@(pet.Status == Status.Lost ? "ZAGINIONY" : "ZBŁĄKANY")] @pet.Name</h5>
+            </div>
+            <img src="@pet.Photo" class="card-img-top" alt="...">
+            <div class="card-body">
+                <p class="card-text">Opis: @pet.Description</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Utworzono: @pet.CreatedAt</li>
+                <li class="list-group-item">Ostatnio widziny w: @pet.LastSeenLocation</li>
+            </ul>
+            <div class="card-footer text-body-secondary">
+            </div>
+        </div>
+
+        <section>
+            <EditForm Model="Input" method="post" OnValidSubmit="AddSighting">
+                <div class="form-floating mb-3">
+                    <InputText @bind-Value="Input.Location" class="form-control text-black" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+                    <label for="email" class="form-label label-custom" style="color: rgb(232, 237, 235)">Lokalizacja</label>
+                    <ValidationMessage For="() => Input.Location" class="text-danger" />
+                </div>
+                <div class="form-floating mb-3">
+                    <InputText @bind-Value="Input.Notes" class="form-control" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
+                    <label for="password" class="form-label label-custom" style="color: rgb(232, 237, 235)">Opis</label>
+                    <ValidationMessage For="() => Input.Notes" class="text-danger" />
+                </div>
+                <div class="modal-footer" style="border-top: none">
+                    <button type="submit" class="w-100 btn btn-lg btn-primary" style="background-color: rgb(0, 104, 74); border: 1px solid rgb(0, 237, 100);">
+                        Dodaj
+                    </button>
+                </div>
+            </EditForm>
+        </section>
+    </div>
+</div>
+}
+</div>
+@code {
+    [Parameter]
+    public string petID { get; set; }
+
+    [SupplyParameterFromForm]
+    private LostPet.Models.Sighting Input { get; set; } = new();
+
+    private int PetIdParsed { get; set; }
+
+    private Pet pet { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        int petIdParsed;
+        bool result = int.TryParse(petID, out petIdParsed);
+        PetIdParsed = petIdParsed;
+        if (!result)
+        {
+            string Url = NavigationManager.BaseUri.ToString();
+            NavigationManager.NavigateTo(Url + "Error", forceLoad: true);
+        }
+        pet = await petService.GetPet(PetIdParsed);
+    }
+
+    public async Task AddSighting()
+    {
+        var userId = await this._userIdentityProcessor.GetCurrentUserId();
+        LostPet.Models.Sighting data = new()
+            {
+                Location = Input.Location,
+                Notes = Input.Notes,
+                PetID = PetIdParsed,
+                UserID = userId,
+                SightingDate = DateTime.Now
+            };
+
+        var entity = await service.AddNewSighting(data);
+
+        RedirectManager.RedirectTo("/");
+    }
+}
