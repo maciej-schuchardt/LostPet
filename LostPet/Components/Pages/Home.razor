@@ -1,0 +1,39 @@
+﻿@page "/"
+@page "/home"
+
+@using LostPet.Components.Shared
+@using LostPet.Services
+
+@inject UserIdentityProcessor _userIdentityProcessor
+@inject FilterService filter
+
+@rendermode InteractiveServer
+
+<LostPet.Components.Shared.Filter />
+<div class="container-fluid col-sm-10 col-md-8 col-lg-3">
+@if (filter.View == null)
+{
+    <span>Loading...</span>
+}
+else if (filter.View.Count == 0)
+{
+    <span>Nie znaleziono</span>
+}
+else
+{
+    @foreach (ReportSightingPetViewModel model in filter.View)
+    {
+        <Article CurrentUser=userId Model=model/>
+    }
+}
+</div>
+@code {
+    string? userId = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        filter.UpdateEvent += async () => await InvokeAsync(() => this.StateHasChanged());
+        userId = await this._userIdentityProcessor.GetCurrentUserId();
+        await filter.Filter(x => true);
+    }
+}
