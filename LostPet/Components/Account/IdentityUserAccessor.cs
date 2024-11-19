@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using LostPet.Data;
 using Microsoft.AspNetCore.Identity;
 
 namespace LostPet.Components.Account
 {
+    [ExcludeFromCodeCoverage]
     internal sealed class IdentityUserAccessor(UserManager<ApplicationUser> userManager, IdentityRedirectManager redirectManager)
     {
         public async Task<ApplicationUser> GetRequiredUserAsync(HttpContext context)

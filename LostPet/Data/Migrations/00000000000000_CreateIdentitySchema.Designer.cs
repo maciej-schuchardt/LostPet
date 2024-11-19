@@ -13,6 +13,7 @@ namespace LostPet.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("00000000000000_CreateIdentitySchema")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     partial class CreateIdentitySchema
     {
         /// <inheritdoc />

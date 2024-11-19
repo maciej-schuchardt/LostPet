@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using System.Text.Json;
 
 namespace Microsoft.AspNetCore.Routing
 {
+    [ExcludeFromCodeCoverage]
     internal static class IdentityComponentsEndpointRouteBuilderExtensions
     {
         // These endpoints are required by the Identity Razor components defined in the /Components/Account/Pages directory of this project.
