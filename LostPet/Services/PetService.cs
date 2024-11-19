@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace LostPet.Services
 {
-    public class PetService(ApplicationDbContext context)
+    public class PetService(ApplicationDbContext context) : IService
     {
         public async Task SetFoundByIdAsync(int id)
         {

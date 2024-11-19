@@ -189,7 +189,7 @@
                     ReportDate = DateTime.Now
             };
 
-            entity2 = await reportService.AddNewReport(report);
+            entity2 = await reportService.AddAsync(report);
         }
         catch (Exception e)
         {

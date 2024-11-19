@@ -76,7 +76,7 @@
     private async void Found(int id)
     {
         await petService.SetFoundByIdAsync(id);
-        await reportService.Found(id);
+        await reportService.SetFoundByIdAsync(id);
         await InvokeAsync(() => this.StateHasChanged());
     }
 }

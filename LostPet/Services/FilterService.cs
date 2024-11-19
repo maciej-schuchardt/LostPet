@@ -44,7 +44,7 @@ namespace LostPet.Services
         {
             var userId = await this._userIdentityProcessor.GetCurrentUserId();
 
-            var reports = await reportService.GetSpecificReports(filter);
+            var reports = await reportService.GetByFilterAsync(filter);
             var sightings = await sightingsService.GetAll();
             this.View = reports.Select(x => new ReportSightingPetViewModel()
             {
