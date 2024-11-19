@@ -1,5 +1,8 @@
-﻿namespace LostPet.Services
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace LostPet.Services
 {
+    [ExcludeFromCodeCoverage]
     public class RealtimeService
     {
         private int _a;
