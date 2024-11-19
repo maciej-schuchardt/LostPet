@@ -1,4 +1,5 @@
-﻿using LostPet.Data;
+﻿using System.Diagnostics.CodeAnalysis;
+using LostPet.Data;
 using LostPet.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -11,6 +12,8 @@ namespace LostPet.Services
         public List<SightingsViewModel> Sightings { get; set; }
         public string ReporterEmail { get; set; }
     }
+    
+    [ExcludeFromCodeCoverage]
     public class FilterService
     {
         public event Func<Task> UpdateEvent;
