@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace LostPet.Services
 {
+    [ExcludeFromCodeCoverage]
     public class UserIdentityProcessor(AuthenticationStateProvider authenticationStateAsync)
     {
         private readonly AuthenticationStateProvider _authenticationStateAsync = authenticationStateAsync;
