@@ -1,14 +1,14 @@
 using System.Diagnostics.CodeAnalysis;
 using LostPet.Models;
+using LostPet.Services;
 using LostPet.Tests.Helpers;
 
 namespace LostPet.Tests.PetServiceTests
 {
     [TestFixture]
     [ExcludeFromCodeCoverage]
-    public partial class PetServiceTests
+    public class PetServiceTests : PetServiceTemplate
     {
-
         #region AddAsync Tests
 
         [Test]
@@ -35,7 +35,7 @@ namespace LostPet.Tests.PetServiceTests
             var recordsBeforeAdd = context.Pets.Count();
 
             // Act
-            await petService.AddAsync(pet);
+            await Service.AddAsync(pet);
 
             // Assert
             Assert.Multiple(() =>
@@ -49,7 +49,7 @@ namespace LostPet.Tests.PetServiceTests
         public void AddAsync_ShouldThrowExceptionOnInvalidObject()
         {
             // Act Assert
-            Assert.That(async delegate { await petService.AddAsync(new()); }, ThrowsHelper.DbUpdateException);
+            Assert.That(async delegate { await this.Service.AddAsync(new()); }, ThrowsHelper.DbUpdateException);
         }
 
         #endregion
@@ -59,7 +59,7 @@ namespace LostPet.Tests.PetServiceTests
         {
             TestContext.Out.WriteLine($"testname: {TestContext.CurrentContext.Test.Name} | randomId: {randomId}");
             // Act
-            Pet result = await petService.GetByIdAsync(randomId);
+            Pet result = await this.Service.GetByIdAsync(randomId);
 
             // Assert
             Assert.That(result, Is.EqualTo(context.Pets.Single(p => p.PetID == randomId)));
@@ -75,7 +75,7 @@ namespace LostPet.Tests.PetServiceTests
             int countBeforeRemove = context.Pets.Count();
 
             // Act
-            await petService.RemoveByIdAsync(randomId);
+            await this.Service.RemoveByIdAsync(randomId);
 
             // Assert
             Assert.Multiple(() =>
@@ -88,7 +88,7 @@ namespace LostPet.Tests.PetServiceTests
         [Test]
         public void RemoveByIdAsync_ShouldThrowOnInvalidId()
         {
-            Assert.That(async delegate { await petService.RemoveByIdAsync(invalidRandomId); }, Throws.InvalidOperationException);
+            Assert.That(async delegate { await this.Service.RemoveByIdAsync(invalidRandomId); }, Throws.InvalidOperationException);
         }
 
         #endregion
@@ -99,11 +99,11 @@ namespace LostPet.Tests.PetServiceTests
         public async Task SetFoundByIdAsync_ShouldSetPetAsFound()
         {
             // Arrange
-            var pet = (await petService.GetByIdAsync(randomId)).Clone() as Pet;
+            var pet = (await this.Service.GetByIdAsync(randomId)).Clone() as Pet;
 
             // Act
-            await petService.SetFoundByIdAsync(randomId);
-            var petAfterChange = await petService.GetByIdAsync(randomId);
+            await this.Service.SetFoundByIdAsync(randomId);
+            var petAfterChange = await this.Service.GetByIdAsync(randomId);
 
             // Assert
             Assert.Multiple(() =>
@@ -117,7 +117,7 @@ namespace LostPet.Tests.PetServiceTests
         [Test]
         public void SetFoundByIdAsync_ShouldThrowOnInvalidId()
         {
-            Assert.That(async delegate { await petService.SetFoundByIdAsync(invalidRandomId); }, Throws.InvalidOperationException);
+            Assert.That(async delegate { await this.Service.SetFoundByIdAsync(invalidRandomId); }, Throws.InvalidOperationException);
         }
 
         #endregion
