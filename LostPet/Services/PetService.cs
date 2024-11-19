@@ -8,71 +8,49 @@ namespace LostPet.Services
 {
     public class PetService(ApplicationDbContext context)
     {
-        public async Task Found(int id)
+        public async Task SetFoundByIdAsync(int id)
         {
-            using IDbContextTransaction transaction = context.Database.BeginTransaction();
             try
             {
                 context.Pets.Single(r => r.PetID == id).Status = Status.Found;
                 await context.SaveChangesAsync();
-                transaction.Commit();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                transaction.Rollback();
                 throw;
             }
         }
 
-        public async Task Remove(int id)
+        public async Task RemoveByIdAsync(int id)
         {
-            using IDbContextTransaction transaction = context.Database.BeginTransaction();
             try
             {
-                await context.Pets.Where(r => r.PetID == id).ExecuteDeleteAsync();
+                context.Remove(await context.Pets.SingleAsync(r => r.PetID == id));
                 await context.SaveChangesAsync();
-                transaction.Commit();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                transaction.Rollback();
                 throw;
             }
         }
 
-        public async Task<List<Pet>> GetRangeOfPets(int position)
+        public async Task<Pet> AddAsync(Pet pet)
         {
-            var pets = await context.Pets.OrderByDescending(p => p.PetID).Skip(position).Take(1).ToListAsync();
-            return pets;
-        }
-        public async Task<List<Pet>> GetAllPets()
-        {
-            var pets = await context.Pets.OrderByDescending(p => p.PetID).ToListAsync();
-            return pets;
-        }
-
-        public async Task<Pet> AddNewPet(Pet pet)
-        {
-            using (IDbContextTransaction transaction = context.Database.BeginTransaction())
+            EntityEntry<Pet> entityEntry = null;
+            try
             {
-                EntityEntry<Pet> entityEntry = null;
-                try
-                {
-                    entityEntry = await context.AddAsync(pet);
-                    await context.SaveChangesAsync();
-                    transaction.Commit();
+                entityEntry = await context.AddAsync(pet);
+                await context.SaveChangesAsync();
 
-                    return entityEntry.Entity;
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    throw;
-                }
+                return entityEntry.Entity;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
-        public async Task<Pet> GetPet(int id)
+        public async Task<Pet> GetByIdAsync(int id)
         {
             var pet = await context.Pets.SingleAsync(x => x.PetID == id);
             return pet;

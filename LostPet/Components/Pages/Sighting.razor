@@ -87,7 +87,7 @@ else
             string Url = NavigationManager.BaseUri.ToString();
             NavigationManager.NavigateTo(Url + "Error", forceLoad: true);
         }
-        pet = await petService.GetPet(PetIdParsed);
+        pet = await petService.GetByIdAsync(PetIdParsed);
     }
 
     public async Task AddSighting()

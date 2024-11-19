@@ -1,4 +1,4 @@
-@using LostPet.Models
+﻿@using LostPet.Models
 @using LostPet.Services
 
 @attribute [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
@@ -69,13 +69,13 @@
 
     private async void Remove(int id)
     {
-        await petService.Remove(id);
+        await petService.RemoveByIdAsync(id);
         await InvokeAsync(() => this.StateHasChanged());
     }
 
     private async void Found(int id)
     {
-        await petService.Found(id);
+        await petService.SetFoundByIdAsync(id);
         await reportService.Found(id);
         await InvokeAsync(() => this.StateHasChanged());
     }
