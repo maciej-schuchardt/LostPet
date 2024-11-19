@@ -1,4 +1,7 @@
-﻿namespace LostPet.Models
+﻿using Newtonsoft.Json;
+using NuGet.Protocol;
+
+namespace LostPet.Models
 {
     public enum Status
     {
@@ -6,7 +9,7 @@
         Stray,
         Found,
     }
-    public class Pet
+    public class Pet : ICloneable
     {
         public int PetID { get; set; }
         public string Name { get; set; }
@@ -23,5 +26,10 @@
         public string UserID { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+
+        public object? Clone()
+        {
+            return JsonConvert.DeserializeObject<Pet>(this.ToJson());
+        }
     }
 }

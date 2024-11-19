@@ -171,7 +171,7 @@
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
                 };
-            entity = await petService.AddNewPet(pet);
+            entity = await petService.AddAsync(pet);
         }
         catch (Exception e)
         {
