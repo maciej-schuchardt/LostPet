@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using LostPet.Components;
 using LostPet.Components.Account;
 using LostPet.Data;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LostPet
 {
+    [ExcludeFromCodeCoverage]
     public class Program
     {
         public static void Main(string[] args)
