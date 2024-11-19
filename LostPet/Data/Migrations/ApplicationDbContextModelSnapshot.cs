@@ -11,6 +11,7 @@ using System;
 namespace LostPet.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

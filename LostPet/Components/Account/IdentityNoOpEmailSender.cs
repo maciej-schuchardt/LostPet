@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using LostPet.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 namespace LostPet.Components.Account
 {
     // Remove the "else if (EmailSender is IdentityNoOpEmailSender)" block from RegisterConfirmation.razor after updating with a real implementation.
+    [ExcludeFromCodeCoverage]
     internal sealed class IdentityNoOpEmailSender : IEmailSender<ApplicationUser>
     {
         private readonly IEmailSender emailSender = new NoOpEmailSender();
