@@ -65,7 +65,7 @@ public abstract class CommonEvents<T> where T : IService
                     Weight = new Random().Next(2, 60),
                     MicrochipID = new Random().Next(1000000, 9999999).ToString(),
                     Photo = Guid.NewGuid().ToString(),
-                    Status = (Status) (5 % i),
+                    Status = (Status) (i % 2),
                     UserID = Guid.NewGuid().ToString(),
                     Description = "TestDescription" + i,
                     LastSeenLocation = "TestLocation" + i,
