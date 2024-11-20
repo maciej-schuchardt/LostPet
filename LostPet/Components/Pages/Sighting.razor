@@ -102,7 +102,7 @@ else
                 SightingDate = DateTime.Now
             };
 
-        var entity = await service.AddNewSighting(data);
+        var entity = await service.AddAsync(data);
 
         RedirectManager.RedirectTo("/");
     }

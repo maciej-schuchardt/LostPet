@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace LostPet.Services
 {
+    [ExcludeFromCodeCoverage]
     public class ReportSightingPetViewModel
     {
         public Pet Pet { get; set; }
@@ -35,6 +36,7 @@ namespace LostPet.Services
         SightingsService sightingsService;
         UserManager<ApplicationUser> _userManager;
 
+        [ExcludeFromCodeCoverage]
         public FilterService(UserIdentityProcessor userIdentityProcessor, ReportService reportService, SightingsService sightingsService, UserManager<ApplicationUser> userManager)
         { 
             _userIdentityProcessor = userIdentityProcessor;
@@ -48,7 +50,7 @@ namespace LostPet.Services
             var userId = await this._userIdentityProcessor.GetCurrentUserId();
 
             var reports = await reportService.GetByFilterAsync(filter);
-            var sightings = await sightingsService.GetAll();
+            var sightings = await sightingsService.GetAllAsync();
             this.View = reports.Select(x => new ReportSightingPetViewModel()
             {
                 Pet = x.Pet,
