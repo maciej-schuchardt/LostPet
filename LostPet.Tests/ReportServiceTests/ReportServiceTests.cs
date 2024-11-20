@@ -13,8 +13,11 @@ namespace LostPet.Tests.ReportServiceTests
         public async Task AddAsync_ShouldAddNewRecord()
         {
             // Arrange
+            int petId = 999;
+
             Pet pet = new()
             {
+                PetID = petId,
                 Name = "TestPet",
                 Species = "TestSpecies",
                 Breed = "TestBreed",
@@ -35,7 +38,7 @@ namespace LostPet.Tests.ReportServiceTests
 
             Report report = new()
             {
-              PetID = context.Pets.First().PetID,
+              PetID = petId,
               UserID = context.Pets.First().UserID,
               ReportType = (int)context.Pets.First().Status,
               ReportDate = (DateTime)context.Pets.First().CreatedAt,
@@ -49,8 +52,8 @@ namespace LostPet.Tests.ReportServiceTests
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(context.Pets.Count(), Is.GreaterThan(recordsBeforeAdd));
-                Assert.That(context.Pets.Any(p => p == pet), Is.True);
+                Assert.That(context.Reports.Count(), Is.GreaterThan(recordsBeforeAdd));
+                Assert.That(context.Reports.Any(p => p.PetID == pet.PetID), Is.True);
             });
         }
     

@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace LostPet.Services
 {
-    public class SightingsService(ApplicationDbContext context)
+    public class SightingsService(ApplicationDbContext context) : IService
     {
-        public async Task<List<SightingsViewModel>> GetAll()
+        public async Task<List<SightingsViewModel>> GetAllAsync()
         {
             var data = await context.Sightings.Join(
                 context.Pets,
@@ -25,21 +25,18 @@ namespace LostPet.Services
             return data;
         }
 
-        public async Task<Sighting> AddNewSighting(Sighting sighting)
+        public async Task<Sighting> AddAsync(Sighting sighting)
         {
-            using IDbContextTransaction transaction = context.Database.BeginTransaction();
             EntityEntry<Sighting> entityEntry = null;
             try
             {
                 entityEntry = await context.AddAsync(sighting);
                 await context.SaveChangesAsync();
-                transaction.Commit();
 
                 return entityEntry.Entity;
             }
-            catch (Exception ex)
+            catch
             {
-                transaction.Rollback();
                 throw;
             }
         }

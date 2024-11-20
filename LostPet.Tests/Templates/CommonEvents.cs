@@ -3,8 +3,6 @@ using LostPet.Data;
 using LostPet.Models;
 using LostPet.Services;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LostPet.Tests.Templates;
 
@@ -47,109 +45,60 @@ public abstract class CommonEvents<T> where T : IService
     [SetUp]
     public async Task BeforeEveryTest()
     {
-        // if (TestContext.CurrentContext.Test.Name != "AddAsync_ShouldAddNewRecord" || TestContext.CurrentContext.Test.Name != "AddAsync_ShouldThrowExceptionOnInvalidObject")
-        // {
-            await context.Pets.AddRangeAsync(
+        for (int i = 1; i <= 30; i++) {
+            await context.Users.AddAsync(new ApplicationUser() {
+                Id = i.ToString(),
+                Email = Guid.NewGuid().ToString() + "@mail.com"
+            });
+        }
+        await context.SaveChangesAsync();
+
+        for (int i = 1; i <= 5; i++) {
+            await context.Pets.AddAsync(
                 new Pet()
                 {
-                    Name = "TestPet",
-                    Species = "TestSpecies",
-                    Breed = "TestBreed",
-                    Color = "TestColor",
+                    Name = "TestPet" + i,
+                    Species = "TestSpecies" + i,
+                    Breed = "TestBreed" + i,
+                    Color = "TestColor" + i,
                     Age = new Random().Next(0, 40),
                     Weight = new Random().Next(2, 60),
                     MicrochipID = new Random().Next(1000000, 9999999).ToString(),
-                    Photo = new Guid().ToString(),
-                    Status = (Status)0,
-                    UserID = new Guid().ToString(),
-                    Description = "TestDescription",
-                    LastSeenLocation = "TestLocation",
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
-                },
-                new Pet()
-                {
-                    Name = "TestPet1",
-                    Species = "TestSpecies1",
-                    Breed = "TestBreed1",
-                    Color = "TestColor1",
-                    Age = new Random().Next(0, 40),
-                    Weight = new Random().Next(2, 60),
-                    MicrochipID = new Random().Next(1000000, 9999999).ToString(),
-                    Photo = new Guid().ToString(),
-                    Status = (Status)0,
-                    UserID = new Guid().ToString(),
-                    Description = "TestDescription",
-                    LastSeenLocation = "TestLocation",
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
-                },
-                new Pet()
-                {
-                    Name = "TestPet2",
-                    Species = "TestSpecies2",
-                    Breed = "TestBreed2",
-                    Color = "TestColor2",
-                    Age = new Random().Next(0, 40),
-                    Weight = new Random().Next(2, 60),
-                    MicrochipID = new Random().Next(1000000, 9999999).ToString(),
-                    Photo = new Guid().ToString(),
-                    Status = (Status)1,
-                    UserID = new Guid().ToString(),
-                    Description = "TestDescription",
-                    LastSeenLocation = "TestLocation",
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
-                },
-                new Pet()
-                {
-                    Name = "TestPet3",
-                    Species = "TestSpecies3",
-                    Breed = "TestBreed3",
-                    Color = "TestColor3",
-                    Age = new Random().Next(0, 40),
-                    Weight = new Random().Next(2, 60),
-                    MicrochipID = new Random().Next(1000000, 9999999).ToString(),
-                    Photo = new Guid().ToString(),
-                    Status = (Status)1,
-                    UserID = new Guid().ToString(),
-                    Description = "TestDescription",
-                    LastSeenLocation = "TestLocation",
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
-                },
-                new Pet()
-                {
-                    Name = "TestPet4",
-                    Species = "TestSpecies4",
-                    Breed = "TestBreed4",
-                    Color = "TestColor4",
-                    Age = new Random().Next(0, 40),
-                    Weight = new Random().Next(2, 60),
-                    MicrochipID = new Random().Next(1000000, 9999999).ToString(),
-                    Photo = new Guid().ToString(),
-                    Status = (Status)1,
-                    UserID = new Guid().ToString(),
-                    Description = "TestDescription",
-                    LastSeenLocation = "TestLocation",
+                    Photo = Guid.NewGuid().ToString(),
+                    Status = (Status) (5 % i),
+                    UserID = Guid.NewGuid().ToString(),
+                    Description = "TestDescription" + i,
+                    LastSeenLocation = "TestLocation" + i,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now
                 }
             );
-            await context.SaveChangesAsync();
-            for (int i = 1; i <= context.Pets.Count(); i++) {
-                var pet = context.Pets.Single(p => p.PetID == i);
-                await context.Reports.AddAsync(new Report(){
+        }
+        await context.SaveChangesAsync();
+
+        for (int i = 1; i <= 5; i++) {
+            var pet = context.Pets.Single(p => p.PetID == i);
+            await context.Reports.AddAsync(new Report(){
+                PetID = pet.PetID,
+                UserID = new Random().Next(1, 31).ToString(),
+                ReportType = (int)pet.Status,
+                Details = pet.Description
+            });
+            for (int j = 1; j <= 5; j++) {
+                await context.Sightings.AddAsync(new Sighting() {
                     PetID = pet.PetID,
-                    UserID = pet.UserID,
-                    ReportType = (int)pet.Status,
-                    Details = pet.Description
+                    Location = Guid.NewGuid().ToString(),
+                    UserID = new Random().Next(1, 31).ToString(),
+                    SightingDate = DateTime.Now,
+                    Notes = Guid.NewGuid().ToString()
                 });
             }
-            await context.SaveChangesAsync();
-            await context.Database.EnsureCreatedAsync();
-            randomId = new Random().Next(1, context.Pets.Count());
-            invalidRandomId = new Random().Next(context.Pets.Count() + 1, context.Pets.Count() * 4);
-        // }
+        }
+        await context.SaveChangesAsync();
+
+        // await context.Sightings.Add();
+        await context.Database.EnsureCreatedAsync();
+        randomId = new Random().Next(1, context.Pets.Count());
+        invalidRandomId = new Random().Next(context.Pets.Count() + 1, context.Pets.Count() * 4);
     }
 }
