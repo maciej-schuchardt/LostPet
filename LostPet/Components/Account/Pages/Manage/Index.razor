@@ -1,6 +1,7 @@
 ﻿@page "/Account/Manage"
 
 @using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
 @using LostPet.Data
 
@@ -10,69 +11,48 @@
 @inject IdentityUserAccessor UserAccessor
 @inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Profile</PageTitle>
+@attribute [Authorize]
 
-<h3>Profile</h3>
-<StatusMessage />
+<PageTitle>Moje dane</PageTitle>
 
-<div class="row">
+<h3 style="color: white; text-align: center;">Moje dane</h3>
+<div class="row justify-content-center">
     <div class="col-md-6">
-        <EditForm Model="Input" FormName="profile" OnValidSubmit="OnValidSubmitAsync" method="post">
-            <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert" />
+        <form>
             <div class="form-floating mb-3">
-                <input type="text" value="@username" class="form-control" placeholder="Please choose your username." disabled />
-                <label for="username" class="form-label">Username</label>
+                <input style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" type="text" value="@username" class="form-control" disabled />
+                <label for="username" class="form-label label-custom">Nazwa użytkownika</label>
             </div>
             <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number." />
-                <label for="phone-number" class="form-label">Phone number</label>
-                <ValidationMessage For="() => Input.PhoneNumber" class="text-danger" />
+                <input style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" type="text" value="@email" class="form-control" disabled />
+                <label for="email" class="form-label label-custom">Email</label>
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
-        </EditForm>
+            <div class="form-floating mb-3">
+                <input style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" value="@phoneNumber" class="form-control" disabled/>
+                <label for="phone-number" class="form-label label-custom">Numer telefonu</label>
+            </div>
+        </form>
     </div>
 </div>
-
+<style>
+    .label-custom::after {
+        background-color: inherit !important;
+    }
+</style>
 @code {
     private ApplicationUser user = default!;
     private string? username;
     private string? phoneNumber;
+    private string? email;
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
-
-    [SupplyParameterFromForm]
-    private InputModel Input { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
         user = await UserAccessor.GetRequiredUserAsync(HttpContext);
         username = await UserManager.GetUserNameAsync(user);
         phoneNumber = await UserManager.GetPhoneNumberAsync(user);
-
-        Input.PhoneNumber ??= phoneNumber;
-    }
-
-    private async Task OnValidSubmitAsync()
-    {
-        if (Input.PhoneNumber != phoneNumber)
-        {
-            var setPhoneResult = await UserManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-            if (!setPhoneResult.Succeeded)
-            {
-                RedirectManager.RedirectToCurrentPageWithStatus("Error: Failed to set phone number.", HttpContext);
-            }
-        }
-
-        await SignInManager.RefreshSignInAsync(user);
-        RedirectManager.RedirectToCurrentPageWithStatus("Your profile has been updated", HttpContext);
-    }
-
-    private sealed class InputModel
-    {
-        [Phone]
-        [Display(Name = "Phone number")]
-        public string? PhoneNumber { get; set; }
+        email = await UserManager.GetEmailAsync(user);
     }
 }
