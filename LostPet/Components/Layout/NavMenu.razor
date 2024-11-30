@@ -14,19 +14,22 @@
 
 <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3 pt-serif-regular">
     <div class="container-fluid">
-        <a class="navbar-brand fs-3" href="#">LostPet &#128021; </a>
+        <a class="navbar-brand fs-3" href="#" id="logo">LostPet &#128021; </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarTogglerDemo02">
             <ul class="navbar-nav mb-2 mb-lg-0">
                 <li class="nav-item p-1">
-                    <MenuButton Text="Zgłoś!" Page="report" />
+                    <MenuButton Text="Zgłoś!" Page="report" id="reports" />
                 </li>
                 <AuthorizeView>
                     <Authorized>
                         <li class="nav-item p-1">
-                            <MenuButton Text="Moje zgłoszenia" Page="myreports" />
+                            <MenuButton Text="Mój profil" Page="Account/Manage" id="profile" />
+                        </li>
+                        <li class="nav-item p-1">
+                            <MenuButton Text="Moje zgłoszenia" Page="myreports" id="myreports"/>
                         </li>
 
                         <li class="nav-item p-1">
@@ -35,15 +38,15 @@
                                 string message = $"Wyloguj {user}";
                             }
 
-                            <MenuButton Text="@message" Page="Account/Logout" />
+                            <MenuButton Text="@message" Page="Account/Logout" id="logout" />
                         </li>
                     </Authorized>
                     <NotAuthorized>
                         <li class="nav-item p-1">
-                            <MenuButton Text="Zaloguj się" Page="Account/Login" />
+                            <MenuButton Text="Zaloguj się" Page="Account/Login" id="login" />
                         </li>
                         <li class="nav-item p-1">
-                            <MenuButton Text="Utwórz nowe konto" Page="Account/Register" />
+                            <MenuButton Text="Utwórz nowe konto" Page="Account/Register" id="register" />
                         </li>
                     </NotAuthorized>
                 </AuthorizeView>

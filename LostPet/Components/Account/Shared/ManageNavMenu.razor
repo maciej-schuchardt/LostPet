@@ -2,37 +2,50 @@
 @using LostPet.Data
 
 @attribute [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-@inject SignInManager<ApplicationUser> SignInManager
 
 <ul class="nav nav-pills flex-column">
     <li class="nav-item">
-        <NavLink class="nav-link" href="Account/Manage" Match="NavLinkMatch.All">Profile</NavLink>
+        <NavLink class="nav-link" href="Account/Manage" Match="NavLinkMatch.All">Moje dane</NavLink>
     </li>
     <li class="nav-item">
-        <NavLink class="nav-link" href="Account/Manage/Email">Email</NavLink>
+        <NavLink class="nav-link" href="Account/Manage/Email">Zmień dane</NavLink>
     </li>
     <li class="nav-item">
-        <NavLink class="nav-link" href="Account/Manage/ChangePassword">Password</NavLink>
-    </li>
-    @if (hasExternalLogins)
-    {
-        <li class="nav-item">
-            <NavLink class="nav-link" href="Account/Manage/ExternalLogins">External logins</NavLink>
-        </li>
-    }
-    <li class="nav-item">
-        <NavLink class="nav-link" href="Account/Manage/TwoFactorAuthentication">Two-factor authentication</NavLink>
+        <NavLink class="nav-link" href="Account/Manage/ChangePassword">Zmień hasło</NavLink>
     </li>
     <li class="nav-item">
-        <NavLink class="nav-link" href="Account/Manage/PersonalData">Personal data</NavLink>
+        <NavLink class="nav-link delete-btn" href="Account/Manage/PersonalData">Usuń konto</NavLink>
     </li>
 </ul>
 
-@code {
-    private bool hasExternalLogins;
 
-    protected override async Task OnInitializedAsync()
-    {
-        hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+<style>
+    .nav-link {
+        color: white !important;
     }
-}
+
+    .nav-link:hover {
+        color: rgb(0, 237, 100) !important;
+    }
+
+    .nav-link.active {
+        background-color: rgb(0, 104, 74) !important;
+        border: 1px solid rgb(0, 237, 100) !important;
+    }
+
+    .delete-btn {
+        color: white !important;
+        background-color: #dc3545 !important;
+    }
+
+    .delete-btn:hover {
+        color: white !important;
+        background-color: #dc3545 !important;
+    }
+
+    .delete-btn.active {
+        color: white !important;
+        background-color: #dc3545 !important;
+        border: none !important;
+    }
+</style>
