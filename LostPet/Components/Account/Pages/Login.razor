@@ -29,7 +29,7 @@
                     <ValidationMessage For="() => Input.Password" class="text-danger" />
                 </div>
                 <div class="modal-footer" style="border-top: none">
-                    <button type="submit" class="w-100 btn btn-lg btn-primary" style="background-color: rgb(0, 104, 74); border: 1px solid rgb(0, 237, 100);">
+                    <button id="loginSubmit" type="submit" class="w-100 btn btn-lg btn-primary" style="background-color: rgb(0, 104, 74); border: 1px solid rgb(0, 237, 100);">
                         Zaloguj się
                     </button>
                 </div>
@@ -72,17 +72,6 @@
         {
             Logger.LogInformation("User logged in.");
             RedirectManager.RedirectTo(ReturnUrl);
-        }
-        else if (result.RequiresTwoFactor)
-        {
-            RedirectManager.RedirectTo(
-                "Account/LoginWith2fa",
-                new() { ["returnUrl"] = ReturnUrl, ["rememberMe"] = Input.RememberMe });
-        }
-        else if (result.IsLockedOut)
-        {
-            Logger.LogWarning("User account locked out.");
-            RedirectManager.RedirectTo("Account/Lockout");
         }
         else
         {

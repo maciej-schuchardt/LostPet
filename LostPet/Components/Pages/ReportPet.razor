@@ -125,7 +125,7 @@
 
         public string? Weight { get; set; } = "";
 
-        public string? MicrochipID { get; set; } = "";
+        public string? MicrochipID { get; set; } = null;
 
         [Required(ErrorMessage = "Pole \"Status\" jest wymagane")]
         public Status? Status { get; set; } = null;
@@ -197,7 +197,8 @@
             throw;
         }
 
-        RedirectManager.RedirectTo("/");
+        // RedirectManager.RedirectTo("/");
+        NavigationManager.NavigateTo("/");
     }
 
     public async Task<string> ImgToBytes(IBrowserFile file)

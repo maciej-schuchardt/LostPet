@@ -23,7 +23,6 @@ namespace LostPet
             builder.Services.AddCascadingAuthenticationState();
             builder.Services.AddScoped<IdentityUserAccessor>();
             builder.Services.AddScoped<IdentityRedirectManager>();
-            builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
             builder.Services.AddScoped<PetService>();
             builder.Services.AddScoped<ReportService>();
             builder.Services.AddScoped<SightingsService>();
@@ -48,9 +47,6 @@ namespace LostPet
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddSignInManager()
                 .AddDefaultTokenProviders();
-
-            builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-            //builder.Services.AddSingleton<RealtimeService>();
 
             var app = builder.Build();
 
