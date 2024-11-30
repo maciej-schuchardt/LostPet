@@ -104,6 +104,7 @@ else
 
         var entity = await service.AddAsync(data);
 
-        RedirectManager.RedirectTo("/");
+        // RedirectManager.RedirectTo("/");
+        NavigationManager.NavigateTo("/");
     }
 }

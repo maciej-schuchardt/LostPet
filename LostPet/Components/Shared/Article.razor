@@ -4,7 +4,9 @@
 @attribute [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 @inject PetService petService
 @inject ReportService reportService
+@inject SightingsService sightingsService
 @inject NavigationManager navigationManager
+@inject FilterService filter
 
 @rendermode InteractiveServer
 
@@ -24,13 +26,19 @@
     <div class="card-footer text-body-secondary overflow-auto @(Model.Sightings.Count > 0 ? "" : "py-0")" style="max-height: 220px; background-color: #023430;">
         @foreach (SightingsViewModel sighting in Model.Sightings)
         {
-            <div class="card border-success mb-3" style="background-color: inherit;">
+            <div class="card border-success mb-3 comment" style="background-color: inherit;">
                 <div class="card-header">Dodane przez: @sighting.ReporterEmail </div>
                 <div class="card-body">
                     <h5 class="card-title">Widziany w: @sighting.Sighting.Location</h5>
                     <p class="card-text">@sighting.Sighting.Notes</p>
                 </div>
                 <div class="card-footer">Dodane: @sighting.Sighting.SightingDate</div>
+                @if (CurrentUser == Model.Report.UserID)
+                {
+                    <div class="card-footer">
+                        <button type="button" class="w-100 btn btn-danger" @onclick="@(() => RemoveComment(sighting.Sighting.SightingID))">Usuń komentarz</button>
+                </div>
+                }
             </div>
         }
     </div>
@@ -70,6 +78,7 @@
     private async void Remove(int id)
     {
         await petService.RemoveByIdAsync(id);
+        await filter.Filter(x => true);
         await InvokeAsync(() => this.StateHasChanged());
     }
 
@@ -77,6 +86,13 @@
     {
         await petService.SetFoundByIdAsync(id);
         await reportService.SetFoundByIdAsync(id);
+        await InvokeAsync(() => this.StateHasChanged());
+    }
+
+    private async void RemoveComment(int id)
+    {
+        await sightingsService.RemoveByIdAsync(id);
+        await filter.Filter(x => true);
         await InvokeAsync(() => this.StateHasChanged());
     }
 }

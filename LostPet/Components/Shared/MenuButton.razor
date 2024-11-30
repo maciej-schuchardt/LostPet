@@ -2,7 +2,7 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<button type="button" @onclick="GoTo" class="btn nav-link center">
+<button type="button" @onclick="GoTo" class="btn nav-link center" id="@Id">
     @Text
 </button>
 
@@ -12,6 +12,9 @@
 
     [Parameter]
     public string? Page { get; set; }
+
+    [Parameter]
+    public string? Id { get; set; }
 
     private void GoTo()
     {
