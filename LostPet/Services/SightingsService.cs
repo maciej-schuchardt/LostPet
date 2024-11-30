@@ -40,5 +40,18 @@ namespace LostPet.Services
                 throw;
             }
         }
+
+        public async Task RemoveByIdAsync(int id)
+        {
+            try
+            {
+                context.Remove(await context.Sightings.SingleAsync(s => s.SightingID == id));
+                await context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
