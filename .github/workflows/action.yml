@@ -22,4 +22,4 @@ jobs:
     - name: Run Unit Tests
       run: dotnet test LostPet.Tests --no-build --verbosity normal
     - name: Run UI Tests
-      run: dotnet test LostPet.UiTests --no-build --verbosity normal
+      run: dotnet test LostPet.UiTests --verbosity normal
