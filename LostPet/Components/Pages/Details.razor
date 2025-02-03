@@ -1,0 +1,119 @@
+﻿@page "/details/{petID}"
+
+@using LostPet.Components.Pages.Account
+@using LostPet.Models
+@using LostPet.Services
+@using Microsoft.AspNetCore.Authorization
+@using Utils
+
+@inject SightingsService service
+@inject PetService petService
+@inject UserIdentityProcessor _userIdentityProcessor
+@inject NavigationManager NavigationManager
+@inject IdentityRedirectManager RedirectManager
+
+@rendermode InteractiveServer
+
+@attribute [Authorize]
+@attribute [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
+
+<div class="container-fluid col-sm-12 col-md-10 col-lg-8">
+    <PageTitle>Zgłoś!</PageTitle>
+    @if (pet == null)
+    {
+        <span>Loading...</span>
+    }
+    else
+    {
+        <div class="row justify-content-center" style="text-align: center">
+            <h3 class="text-light pb-3">Szczegóły dotyczące zwierzaka</h3>
+            <div class="col-sm-12 col-md-10">
+                <div class="card my-5">
+                    <div class="card-header">
+                        <h5 class="card-title">[@(pet.Status == Status.Lost ? "ZAGINIONY" : "ZBŁĄKANY")] @pet.Name</h5>
+                    </div>
+                    <img src="@pet.Photo" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <p class="card-text">Opis: @pet.Description</p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Utworzono: @pet.CreatedAt</li>
+                        <li class="list-group-item">Ostatnio widziny w: @pet.LastSeenLocation</li>
+                    </ul>
+                    <ul class="list-group list-group-flush">
+                        <p>Szczegóły</p>
+                        @if (!string.IsNullOrEmpty(pet.Species))
+                        {
+                            <li class="list-group-item">Gatunek: @pet.Species</li>
+                        }
+                        @if (pet.Age != null)
+                        {
+                            <li class="list-group-item">Wiek: @pet.Age</li>
+                        }
+                        @if (!string.IsNullOrEmpty(pet.Breed))
+                        {
+                            <li class="list-group-item">Rasa: @pet.Breed</li>
+                        }
+                        @if (!string.IsNullOrEmpty(pet.Color))
+                        {
+                            <li class="list-group-item">Kolor: @pet.Color</li>
+                        }
+                        @if (pet.Sex != null)
+                        {
+                            <li class="list-group-item">Płeć: @(pet.Sex == Sex.Male ? "Samiec" : "Samica")</li>
+                        }
+                        @if (pet.Weight != null)
+                        {
+                            <li class="list-group-item">Waga: @pet.Weight</li>
+                        }
+                        <li class="list-group-item">Ostatnio widziny w: @pet.LastSeenLocation</li>
+                    </ul>
+                    <div class="card-footer text-body-secondary">
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@code {
+    [Parameter]
+    public string petID { get; set; }
+
+    [SupplyParameterFromForm]
+    private LostPet.Models.Sighting Input { get; set; } = new();
+
+    private int PetIdParsed { get; set; }
+
+    private Pet pet { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        int petIdParsed;
+        bool result = int.TryParse(petID, out petIdParsed);
+        PetIdParsed = petIdParsed;
+        if (!result)
+        {
+            string Url = NavigationManager.BaseUri.ToString();
+            NavigationManager.NavigateTo(Url + "Error", forceLoad: true);
+        }
+        pet = await petService.GetByIdAsync(PetIdParsed);
+    }
+
+    public async Task AddSighting()
+    {
+        var userId = await this._userIdentityProcessor.GetCurrentUserId();
+        LostPet.Models.Sighting data = new()
+            {
+                Location = Input.Location,
+                Notes = Input.Notes,
+                PetID = PetIdParsed,
+                UserID = userId,
+                SightingDate = DateTime.Now
+            };
+
+        var entity = await service.AddAsync(data);
+
+        // RedirectManager.RedirectTo("/");
+        NavigationManager.NavigateTo("/");
+    }
+}

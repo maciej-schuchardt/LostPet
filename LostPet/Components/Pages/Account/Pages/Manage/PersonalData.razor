@@ -1,4 +1,5 @@
-﻿@page "/Account/Manage/PersonalData"
+﻿@using Utils
+@page "/Account/Manage/PersonalData"
 
 @attribute [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 @inject IdentityUserAccessor UserAccessor
@@ -6,20 +7,20 @@
 <PageTitle>Personal Data</PageTitle>
 
 <StatusMessage />
-<h3>Personal Data</h3>
+<h3 style="color: white">Usuń konto</h3>
 
-<div class="row">
+<div class="row" style="color: white">
     <div class="col-md-6">
-        <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
+        <p>Twoje konto zawiera dane osobowe przekazane przez ciebie w trakcie tworzenia konta. Ta strona pozwala na pobranie lub usunięcie tych danych.</p>
         <p>
-            <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
+            <strong>Usunięcie danych osobowych spowoduje trwałe usunięcie konta. Ta czynność jest nie odwracalna.</strong>
         </p>
         <form action="Account/Manage/DownloadPersonalData" method="post">
             <AntiforgeryToken />
-            <button class="btn btn-primary" type="submit">Download</button>
+            <button class="btn btn-primary" type="submit">Pobierz dane</button>
         </form>
         <p>
-            <a href="Account/Manage/DeletePersonalData" class="btn btn-danger">Delete</a>
+            <a href="Account/Manage/DeletePersonalData" class="btn btn-danger">Usuń</a>
         </p>
     </div>
 </div>

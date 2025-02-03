@@ -1,9 +1,9 @@
-﻿@using LostPet.Components.Account
+﻿@using LostPet.Components.Pages.Account
 @using LostPet.Components.Shared
 @using LostPet.Data
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
-
+@using Utils
 @attribute [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IdentityRedirectManager RedirectManager
@@ -15,6 +15,10 @@
 <nav class="navbar navbar-expand-sm navbar-light border-bottom box-shadow mb-3 pt-serif-regular">
     <div class="container-fluid">
         <a class="navbar-brand fs-3" href="#" id="logo">LostPet &#128021; </a>
+        @if (Program.Testing)
+        {
+            <h6 style="color:red">SYSTEM UNDER TEST!</h6>
+        }
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

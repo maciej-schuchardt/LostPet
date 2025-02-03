@@ -6,10 +6,11 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 @using LostPet.Data
+@using Utils
 
 @attribute [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 @inject UserManager<ApplicationUser> UserManager
-@inject IEmailSender<ApplicationUser> EmailSender
+@* @inject IEmailSender<ApplicationUser> EmailSender *@
 @inject IdentityUserAccessor UserAccessor
 @inject NavigationManager NavigationManager
 @inject SignInManager<ApplicationUser> SignInManager

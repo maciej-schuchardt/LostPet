@@ -29,23 +29,27 @@
             <div class="card border-success mb-3 comment" style="background-color: inherit;">
                 <div class="card-header">Dodane przez: @sighting.ReporterEmail </div>
                 <div class="card-body">
-                    <h5 class="card-title">Widziany w: @sighting.Sighting.Location</h5>
+                    @if(!string.IsNullOrEmpty(sighting.Sighting.Location)) {<h5 class="card-title">Widziany w: @sighting.Sighting.Location</h5>}
                     <p class="card-text">@sighting.Sighting.Notes</p>
                 </div>
                 <div class="card-footer">Dodane: @sighting.Sighting.SightingDate</div>
-                @if (CurrentUser == Model.Report.UserID)
+            <AuthorizeView>
+                    @if (CurrentUser == Model.Report.UserID || (context.User.Claims?.FirstOrDefault(r => r.Type.Contains("role"))?.Value == "SuperAdmin"))
                 {
                     <div class="card-footer">
                         <button type="button" class="w-100 btn btn-danger" @onclick="@(() => RemoveComment(sighting.Sighting.SightingID))">Usuń komentarz</button>
                 </div>
                 }
+                </AuthorizeView>
             </div>
         }
     </div>
     <div class="card-footer text-body-secondary">
         <div class="btn-group" role="group" aria-label="Basic outlined example" style="width: 100%">
+            <button type="button" class="btn btn-outline-primary main-button" @onclick="@(e => Details(Model.Pet.PetID))">Szczegóły</button>
             <button type="button" class="btn btn-outline-primary main-button" disabled="@(Model.Pet.Status == Status.Found)" @onclick="@(e => AddComment(Model.Pet.PetID))">Dodaj komentarz</button>
-            @if (CurrentUser == Model.Report.UserID)
+            <AuthorizeView>
+                @if (CurrentUser == Model.Report.UserID || (context.User.Claims?.FirstOrDefault(r => r.Type.Contains("role"))?.Value == "SuperAdmin"))
             {
                 @if (Model.Pet.Status != Status.Found)
                 {
@@ -53,6 +57,7 @@
                 }
                 <button type="button" class="btn btn-danger" @onclick="@(() => Remove(Model.Pet.PetID))">Usuń</button>
             }
+            </AuthorizeView>
         </div>
     </div>
 </div>
@@ -72,6 +77,14 @@
         if(Model.Pet.Status != Status.Found)
         {
             navigationManager.NavigateTo($"Sighting/{pet}");
+        }
+    }
+
+    private void Details(int pet)
+    {
+        if (Model.Pet.Status != Status.Found)
+        {
+            navigationManager.NavigateTo($"details/{pet}");
         }
     }
 

@@ -11,9 +11,9 @@ public abstract class SightingsServiceTestsTemplate : CommonEvents<SightingsServ
 
     protected override SightingsService Service { get => service; }
 
-    public override void Setup()
+    public override void OneTimeSetUp()
     {
-        base.Setup();
+        base.OneTimeSetUp();
         service = new SightingsService(context);
     }
 }

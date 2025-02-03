@@ -26,6 +26,7 @@ namespace LostPet.Tests.PetServiceTests
                 MicrochipID = new Random().Next(1000000, 9999999).ToString(),
                 Photo = new Guid().ToString(),
                 Status = (Status)new Random().Next(0, 2),
+                Sex = (Sex)new Random().Next(0, 2),
                 UserID = new Guid().ToString(),
                 Description = "TestDescription",
                 LastSeenLocation = "TestLocation",

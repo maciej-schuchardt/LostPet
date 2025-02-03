@@ -20,12 +20,12 @@ namespace LostPet.UiTests
 
 
         [OneTimeSetUp]
-        public async Task BeforeAllAsync()
+        public async Task OneTimeSetUp()
         {
             try
             {
                 string sutPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName;
-                sut = StartSystemUnderTest($@"{sutPath}\LostPet\", "dotnet", "run");
+                sut = StartSystemUnderTest($@"{sutPath}\LostPet\", "dotnet", "run -- uiTests");
 
                 playwright = await Playwright.CreateAsync();
                 browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -68,7 +68,7 @@ namespace LostPet.UiTests
         }
 
         [OneTimeTearDown]
-        public async Task AfterAllAsync()
+        public async Task OneTimeTearDown()
         {
             await page.CloseAsync();
             await context.CloseAsync();

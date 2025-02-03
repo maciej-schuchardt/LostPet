@@ -13,9 +13,9 @@ public abstract class PetServiceTemplate : CommonEvents<PetService>
 
     protected override PetService Service { get => service; }
 
-    public override void Setup()
+    public override void OneTimeSetUp()
     {
-        base.Setup();
+        base.OneTimeSetUp();
         service = new PetService(context);
     }
 }

@@ -1,9 +1,11 @@
 ﻿@page "/sighting/{petID}"
 
-@using LostPet.Components.Account
+@using LostPet.Components.Pages.Account
 @using LostPet.Models
 @using LostPet.Services
 @using Microsoft.AspNetCore.Authorization
+@using System.ComponentModel.DataAnnotations
+@using Utils
 
 @inject SightingsService service
 @inject PetService petService
@@ -44,8 +46,9 @@ else
         </div>
 
         <section>
-            <EditForm Model="Input" method="post" OnValidSubmit="AddSighting">
-                <div class="form-floating mb-3">
+                    <EditForm Model="Input" method="post" OnValidSubmit="AddSighting" FormName="commentForm">
+                        <DataAnnotationsValidator />
+                        <div class="form-floating mb-3">
                     <InputText @bind-Value="Input.Location" class="form-control text-black" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
                     <label for="email" class="form-label label-custom" style="color: rgb(232, 237, 235)">Lokalizacja</label>
                     <ValidationMessage For="() => Input.Location" class="text-danger" />
@@ -70,9 +73,15 @@ else
     [Parameter]
     public string petID { get; set; }
 
-    [SupplyParameterFromForm]
-    private LostPet.Models.Sighting Input { get; set; } = new();
+    [SupplyParameterFromForm(FormName = "commentForm")]
+    private SightingViewModel Input { get; set; } = new();
+    public class SightingViewModel
+    {
+        public string Location { get; set; }
 
+        [Required(ErrorMessage = "Pole \"Opis\" jest wymagane")]
+        public string Notes { get; set; }
+    }
     private int PetIdParsed { get; set; }
 
     private Pet pet { get; set; }
@@ -95,7 +104,7 @@ else
         var userId = await this._userIdentityProcessor.GetCurrentUserId();
         LostPet.Models.Sighting data = new()
             {
-                Location = Input.Location,
+                Location = Input.Location ?? "",
                 Notes = Input.Notes,
                 PetID = PetIdParsed,
                 UserID = userId,

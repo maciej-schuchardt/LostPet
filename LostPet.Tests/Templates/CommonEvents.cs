@@ -18,7 +18,7 @@ public abstract class CommonEvents<T> where T : IService
     protected abstract T Service { get; }
 
     [OneTimeSetUp]
-    public virtual void Setup()
+    public virtual void OneTimeSetUp()
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString());
@@ -26,13 +26,13 @@ public abstract class CommonEvents<T> where T : IService
     }
 
     [OneTimeTearDown]
-    public void TearDown()
+    public void OneTimeTearDown()
     {
         context.Dispose();
     }
 
     [TearDown]
-    public async Task AfterEach()
+    public async Task TearDown()
     {
         context.ChangeTracker
             .Entries()
@@ -43,7 +43,7 @@ public abstract class CommonEvents<T> where T : IService
 
     
     [SetUp]
-    public async Task BeforeEveryTest()
+    public async Task SetUp()
     {
         for (int i = 1; i <= 30; i++) {
             await context.Users.AddAsync(new ApplicationUser() {
@@ -66,6 +66,7 @@ public abstract class CommonEvents<T> where T : IService
                     MicrochipID = new Random().Next(1000000, 9999999).ToString(),
                     Photo = Guid.NewGuid().ToString(),
                     Status = (Status) (i % 2),
+                    Sex = (Sex) (i % 2),
                     UserID = Guid.NewGuid().ToString(),
                     Description = "TestDescription" + i,
                     LastSeenLocation = "TestLocation" + i,

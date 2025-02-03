@@ -9,6 +9,12 @@ namespace LostPet.Models
         Stray,
         Found,
     }
+
+    public enum Sex
+    {
+        Male,
+        Female
+    }
     public class Pet : ICloneable
     {
         public int PetID { get; set; }
@@ -26,6 +32,7 @@ namespace LostPet.Models
         public string UserID { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public Sex? Sex { get; set; }
 
         public object? Clone()
         {

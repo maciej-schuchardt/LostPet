@@ -51,5 +51,32 @@ namespace LostPet.Services
                 throw;
             }
         }
+
+        public async Task RemoveByIdAsync(int id)
+        {
+            try
+            {
+                context.Remove(await context.Reports.SingleAsync(s => s.ReportID == id));
+                await context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task UpdateDetailsByIdAsync(int id, string details)
+        {
+            try
+            {
+                var entity = await context.Reports.SingleAsync(s => s.ReportID == id);
+                entity.Details = details;
+                await context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
     }
 }

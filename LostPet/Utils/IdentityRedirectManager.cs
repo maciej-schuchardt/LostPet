@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
 
-namespace LostPet.Components.Account
+namespace LostPet.Utils
 {
     [ExcludeFromCodeCoverage]
     internal sealed class IdentityRedirectManager(NavigationManager navigationManager)

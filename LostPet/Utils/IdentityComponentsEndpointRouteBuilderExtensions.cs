@@ -1,5 +1,5 @@
-using LostPet.Components.Account.Pages;
-using LostPet.Components.Account.Pages.Manage;
+using LostPet.Components.Pages.Account.Pages;
+using LostPet.Components.Pages.Account.Pages.Manage;
 using LostPet.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -11,7 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using System.Text.Json;
 
-namespace Microsoft.AspNetCore.Routing
+namespace LostPet.Utils
 {
     [ExcludeFromCodeCoverage]
     internal static class IdentityComponentsEndpointRouteBuilderExtensions

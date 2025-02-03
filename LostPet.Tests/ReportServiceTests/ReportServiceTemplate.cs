@@ -10,9 +10,9 @@ namespace LostPet.Tests.ReportServiceTests
         private ReportService service;
         protected override ReportService Service { get => service; }
 
-        public override void Setup()
+        public override void OneTimeSetUp()
         {
-            base.Setup();
+            base.OneTimeSetUp();
             service = new ReportService(context);
         }
     }

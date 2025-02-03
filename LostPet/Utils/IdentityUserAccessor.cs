@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using LostPet.Data;
 using Microsoft.AspNetCore.Identity;
 
-namespace LostPet.Components.Account
+namespace LostPet.Utils
 {
     [ExcludeFromCodeCoverage]
     internal sealed class IdentityUserAccessor(UserManager<ApplicationUser> userManager, IdentityRedirectManager redirectManager)

@@ -1,7 +1,7 @@
 ﻿@page "/report"
 
-@using LostPet.Components.Account
-@using LostPet.Components.Account.Shared
+@using LostPet.Components.Pages.Account
+@using LostPet.Components.Shared
 @using LostPet.Models
 @using System.ComponentModel.DataAnnotations
 @using LostPet.Services
@@ -9,6 +9,7 @@
 @using Microsoft.AspNetCore.Identity
 @using LostPet.Data
 @using Microsoft.AspNetCore.Authorization
+@using Utils
 @using Microsoft.EntityFrameworkCore.ChangeTracking
 
 @attribute [Authorize]
@@ -88,12 +89,25 @@
         </div>
     </div>
     <div class="row">
-        <div class="form-floating mb-3 col-sm-12 col-md-6">
+            <div class="form-floating mb-3 col-sm-12 col-md-4">
+                <InputSelect @bind-Value="Input.Sex" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;">
+                    <option checked="@(Input!.Sex == Sex.Male)"
+                            value=@Sex.Male>
+                        Samiec
+                    </option>
+                    <option checked="@(Input!.Sex == Sex.Female)"
+                            value=@Sex.Female>
+                        Samica
+                    </option>
+                </InputSelect>
+                <label for="Sex" class="form-label label-custom" style="color: rgb(232, 237, 235)">Płeć</label>
+            </div>
+        <div class="form-floating mb-3 col-sm-12 col-md-4">
             <InputText @bind-Value="Input.LastSeenLocation" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
             <label for="LastSeenLocation" class="form-label label-custom" style="color: rgb(232, 237, 235)">Ostatnio widziany</label>
             <ValidationMessage For="() => Input.LastSeenLocation" class="text-danger" />
         </div>
-        <div class="form-floating mb-3 col-sm-12 col-md-6">
+        <div class="form-floating mb-3 col-sm-12 col-md-4">
             <InputText @bind-Value="Input.Description" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
             <label for="Description" class="form-label label-custom" style="color: rgb(232, 237, 235)">Opis</label>
             <ValidationMessage For="() => Input.Description" class="text-danger" />
@@ -130,6 +144,9 @@
         [Required(ErrorMessage = "Pole \"Status\" jest wymagane")]
         public Status? Status { get; set; } = null;
 
+        [Required(ErrorMessage = "Pole \"Płeć\" jest wymagane")]
+        public Sex? Sex { get; set; } = null;
+
         [Required(ErrorMessage = "Pole \"Ostatnio widziany\" jest wymagane")]
         public string? LastSeenLocation { get; set; } = "";
 
@@ -164,12 +181,13 @@
                     Weight = Input.Weight != string.Empty ? Convert.ToDouble(Input.Weight) : 0,
                     MicrochipID = Input.MicrochipID,
                     Photo = photo,
-                    Status = (Status) Input.Status,
+                    Status = (Status)Input.Status,
                     UserID = userId,
                     Description = Input.Description,
                     LastSeenLocation = Input.LastSeenLocation,
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
+                    Sex = (Sex)Input.Sex
                 };
             entity = await petService.AddAsync(pet);
         }

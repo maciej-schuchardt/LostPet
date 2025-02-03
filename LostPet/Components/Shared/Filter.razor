@@ -46,6 +46,19 @@
                             <label for="Status" class="form-label label-custom" style="color: rgb(232, 237, 235)">Status</label>
                         </div>
                         <div class="form-floating w-auto col-sm-12 custom-margin">
+                            <InputSelect @bind-Value="Input.Sex" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;">
+                                <option checked="@(Input!.Sex == Sex.Male)"
+                                        value=@Sex.Male>
+                                    Samiec
+                                </option>
+                                <option checked="@(Input!.Sex == Sex.Female)"
+                                        value=@Sex.Female>
+                                    Samica
+                                </option>
+                            </InputSelect>
+                            <label for="Sex" class="form-label label-custom" style="color: rgb(232, 237, 235)">Płeć</label>
+                        </div>
+                        <div class="form-floating w-auto col-sm-12 custom-margin">
                             <InputText @bind-Value="Input.LastSeenLocation" class="form-control text-black" aria-required="true" style="background-color: rgb(17, 39, 51); color: rgb(232, 237, 235) !important;" />
                             <label for="LastSeenLocation" class="form-label label-custom" style="color: rgb(232, 237, 235)">Ostatnio widziany</label>
                         </div>
@@ -79,6 +92,8 @@
 
         public Status? Status { get; set; } = null;
 
+        public Sex? Sex { get; set; } = null;
+
         public string LastSeenLocation { get; set; } = "";
 
         public string Description { get; set; } = "";
@@ -95,6 +110,7 @@
                 var r5 = x.Status != null && Input.Status != null ? x.Status.Equals(Input.Status) : true;
                 var r6 = x.LastSeenLocation.Contains(Input.LastSeenLocation);
                 var r7 = x.Description.Contains(Input.Description);
+                var r8 = x.Sex != null && Input.Status != null ? x.Status.Equals(Input.Sex) : true;
 
                 return result && r2 && r3 && r4 && r5 && r6 && r7;
             }

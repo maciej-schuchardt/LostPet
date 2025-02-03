@@ -3,7 +3,7 @@ namespace LostPet.Tests
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class RefreshCoverage
     {
-        [Test]
+        //[Test]
         public void RefreshCoverageTest()
         {
             Assert.Pass();
