@@ -1,6 +1,3 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
 name: .NET
 
 on:
@@ -10,10 +7,8 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
+  LostPet_Continous_Integration:
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET
@@ -24,5 +19,11 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Run Unit Tests
+      run: dotnet test LostPet.Tests --no-build --verbosity normal
+    - name: Build UI Tests
+      run: dotnet build LostPet.UiTests
+    # - name: Ensure browsers are installed
+    #   run: pwsh LostPet.UiTests/bin/Debug/net8.0/playwright.ps1 install --with-deps
+    # - name: Run UI Tests
+    #   run: dotnet test LostPet.UiTests --verbosity normal
