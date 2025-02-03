@@ -24,6 +24,6 @@ jobs:
     - name: Build UI Tests
       run: dotnet build LostPet.UiTests
     - name: Ensure browsers are installed
-      run: pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps
+      run: pwsh LostPet.UiTests/bin/Debug/net8.0/playwright.ps1 install --with-deps
     - name: Run UI Tests
       run: dotnet test LostPet.UiTests --verbosity normal
